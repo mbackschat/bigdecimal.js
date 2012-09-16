@@ -37,9 +37,9 @@ file JS_BUILD => CJS_DIR do |task|
 
   gwt_js = Dir.glob("#{GWT}/war/gwtapp/#{'?' * 32}.cache.js").last
   puts "Using compiled JS: #{gwt_js}"
-  gwt_source = File.new(gwt_js).read
+  gwt_source = File.read(gwt_js)
 
-  File.new(task.name, 'w').write(gwt_source)
+  File.open(task.name, 'w') {|f| f.write(gwt_source) }
   puts "#{gwt_js} => #{task.name}"
 end
 
@@ -149,13 +149,14 @@ def wrap_nosigs(return_type, name, *param_types)
   "public #{return_type} #{name}(#{formal.join ', '}) { return #{expr}; }"
 end
 
+# Example usage: <%= call_signatures 'args', 'obj = new java.math.BigInteger', 'string', 'string int' %>
 def call_signatures(args, expression, *signatures)
   lines = []
   lines << "String sig = JsArgs.signature(#{args});"
   signatures.each_with_index do |sig, a|
     js_types = []
     param_types = []
-    sig.to_s.split.each do |param, a|
+    sig.to_s.split.each_with_index do |param, a|
       if %w[ int double ].include? param
         js_types << 'number'
         param_types << param.capitalize

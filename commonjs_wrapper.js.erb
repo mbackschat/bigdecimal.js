@@ -25,6 +25,14 @@ fix_and_export('BigDecimal');
 fix_and_export('BigInteger');
 
 // This is an unfortunate kludge because Java methods and constructors cannot accept vararg parameters.
+
+// Martin: Outdated???
+// gwt-exporter; r63: Aug 3, 2011: Support arrays and varArgs of closures. Fix return wrappers
+// http://code.google.com/p/gwt-exporter/source/detail?r=63&path=/trunk/src/main/java/org/timepedia/exporter/client/ExporterUtil.java
+//
+// r51: Jul 1, 2011: Fix arrays when they were parameters in overloaded methods. Handle var args, now if a method is m(String...s), we can call it as m(), m("a"), m("a","b"), m(["a","b"])
+// http://code.google.com/p/gwt-exporter/source/browse/trunk/samples/src/main/java/simpledemo/client/SimpleDemo.java?spec=svn51&r=51
+
 function fix_and_export(class_name) {
   var Src = window.bigdecimal[class_name];
   var Fixed = Src;
